@@ -83,6 +83,7 @@ prompt=""
 Liked=""
 Disliked=""
 for line in fileopen:
+    
     if(line.split("::")[0].replace(" ","")==str(checkid)):
       if((int)(line.split("::")[2])>3):
         liked.append(line.split("::")[1])
@@ -91,33 +92,39 @@ for line in fileopen:
     else:
       listlentght=len(liked)
       promptid=(int)(listlentght*0.8)
-     # listlentght=len(liked)
-     # promptid=(int)(listlentght*0.8)
-     # fileopenmovies=open(filetopenmovies,'r')
-     # set1=set(liked[:promptid])
-     # set2=set(liked[promptid:])
-     # set3=set(disliked)
-     # for movies in fileopenmovies:
-     #   if(movies.split("::")[0] in set1):
-     #     if(prompt==""):
-     #       prompt=movies.split("::")[1]
-     #     else:
-     #       prompt+="-"+movies.split("::")[1]  
-     #   if(movies.split("::")[0] in set2):
-     #     if(Liked==""):
-     #       Liked=movies.split("::")[1]
-     #     else:
-     #       Liked+="-"+movies.split("::")[1] 
-     #   if(movies.split("::")[0] in set3):
-     #     if(Disliked==""):
-     #       Disliked=movies.split("::")[1]
-     #     else:
-     #       Disliked+="-"+movies.split("::")[1]
-     # fileopenmovies.close()           
+      listlentght=len(liked)
+      promptid=(int)(listlentght*0.8)
+      fileopenmovies=open(filetopenmovies,'r')
+      set1=set(liked[:promptid])
+      set2=set(liked[promptid:])
+      set3=set(disliked)
+      for movies in fileopenmovies:
+        if(movies.split("::")[0] in set1):
+          if(prompt==""):
+            prompt=movies.split("::")[1]
+          else:
+            prompt+="-"+movies.split("::")[1]  
+        if(movies.split("::")[0] in set2):
+          if(Liked==""):
+            Liked=movies.split("::")[1]
+          else:
+            Liked+="-"+movies.split("::")[1] 
+        if(movies.split("::")[0] in set3):
+          if(Disliked==""):
+            Disliked=movies.split("::")[1]
+          else:
+            Disliked+="-"+movies.split("::")[1]
+      fileopenmovies.close()           
       if(checkid<=p1): 
-       fileopentraining.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
+       fileopentraining.write(str(checkid)+"::Film che l'utente ha gradito::"+prompt+"/"+Liked+"/"+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
+       prompt=""
+       Liked=""
+       Disliked=""      
       else:
-       fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
+       fileopentest.write(str(checkid)+"::Film che l'utente ha gradito::"+prompt+"/"+Liked+"/"+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
+       prompt=""
+       Liked=""
+       Disliked=""      
       liked.clear()
       disliked.clear()
       if((int)(line.split("::")[2])>3):
@@ -125,26 +132,13 @@ for line in fileopen:
       else:
         disliked.append(line.split("::")[1])
       checkid=(int)(line.split("::")[0].replace(" ",""))
-       
-fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
+   
+        
+fileopentest.write(str(checkid)+"::Film che l'utente ha gradito::"+prompt+"/"+Liked+"/"+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
 fileopentraining.close()
 fileopentest.close()  
 
 
-fileopen=open(filetopentraining,"r")
-stringa=""
-for row in fileopen:
-        if(row==""):
-         with open('dataratings.csv', 'w', newline='', encoding='UTF-8') as out_file:
-            writer = csv.writer(out_file)
-            writer.writerows(stringa)
-            stringa=""
-        else:
-          if(stringa==""):
-            stringa=row
-          else:
-            stringa+=row
-fileopen.close()
    
 
 
