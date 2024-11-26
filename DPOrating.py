@@ -73,8 +73,8 @@ while w==0:
 
 fileopentest=open(filetopentest,'w')
 fileopentraining=open(filetopentraining,'w')
-fileopentraining.write("prompt/Liked/Disliked\n")
-fileopentest.write("prompt/Liked/Disliked\n")
+fileopentraining.write("prompt / Liked / Disliked \n")
+fileopentest.write("prompt / Liked / Disliked \n")
 checkid=1
 promptid=0
 liked=list()
@@ -103,25 +103,25 @@ for line in fileopen:
           if(prompt==""):
             prompt=movies.split("::")[1]
           else:
-            prompt+="-"+movies.split("::")[1]  
+            prompt+=" - "+movies.split("::")[1]  
         if(movies.split("::")[0] in set2):
           if(Liked==""):
             Liked=movies.split("::")[1]
           else:
-            Liked+="-"+movies.split("::")[1] 
+            Liked+=" - "+movies.split("::")[1] 
         if(movies.split("::")[0] in set3):
           if(Disliked==""):
             Disliked=movies.split("::")[1]
           else:
-            Disliked+="-"+movies.split("::")[1]
+            Disliked+=" - "+movies.split("::")[1]
       fileopenmovies.close()           
       if(checkid<=p1): 
-       fileopentraining.write(str(checkid)+"::Film che l'utente ha gradito::"+prompt+"/"+Liked+"/"+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
+       fileopentraining.write("Film che l'utente ha gradito : "+prompt+" / "+Liked+" / "+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
        prompt=""
        Liked=""
        Disliked=""      
       else:
-       fileopentest.write(str(checkid)+"::Film che l'utente ha gradito::"+prompt+"/"+Liked+"/"+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
+       fileopentest.write("Film che l'utente ha gradito : "+prompt+" / "+Liked+" / "+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
        prompt=""
        Liked=""
        Disliked=""      
@@ -134,7 +134,7 @@ for line in fileopen:
       checkid=(int)(line.split("::")[0].replace(" ",""))
    
         
-fileopentest.write(str(checkid)+"::Film che l'utente ha gradito::"+prompt+"/"+Liked+"/"+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
+fileopentest.write("Film che l'utente ha gradito : "+prompt+" / "+Liked+" / "+Disliked+"\n\n")#fileopentest.write(str(checkid)+"::"+str(liked[:promptid])+"/"+str(liked[promptid:])+"/"+str(disliked)+"\n\n")
 fileopentraining.close()
 fileopentest.close()  
 
