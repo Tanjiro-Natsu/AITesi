@@ -1,6 +1,7 @@
-from transformers import GPT2Tokenizer
+from transformers import AutoTokenizer
 import os
-tokenizer=GPT2Tokenizer.from_pretrained("gpt2")
+path=input("Inserire il percorso in cui è presente Llama3.1-8B-Instruct \n>>")
+tokenizer=AutoTokenizer.from_pretrained(path)#"C:\\Users\\marco\\Desktop\\AITesi\\C-\\Users\\marco\\.llama\\checkpoints\\Llama3.1-8B-Instruct")#
 k=0
 loop=0
 while loop==0:
@@ -36,6 +37,6 @@ for line in fileopen:
   filekenized.write(string +"]"+"\n")
 filekenized.close()
 fileopen.close()
-  
+ 
   
 

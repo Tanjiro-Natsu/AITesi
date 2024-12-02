@@ -73,8 +73,6 @@ while w==0:
 
 fileopentest=open(filetopentest,'w')
 fileopentraining=open(filetopentraining,'w')
-fileopentraining.write("prompt / Liked / Disliked \n")
-fileopentest.write("prompt / Liked / Disliked \n")
 checkid=1
 promptid=0
 liked=list()
@@ -138,7 +136,29 @@ fileopentest.write("Film che l'utente ha gradito : "+prompt+" / "+Liked+" / "+Di
 fileopentraining.close()
 fileopentest.close()  
 
-
-   
-
-
+import csv 
+rows=list()
+k=0
+with open(filetopentest,"r") as in_file:
+ for line in in_file:
+  lines=line.split("/")
+  if(len(lines)==3):
+   rows.append({"Prompt":lines[0],"Liked":lines[1],"Disliked":lines[2]}) 
+  else:
+   continue
+with open ("DataSetTest.csv","w",encoding="UTF-8",newline="") as out_file:
+    writer=csv.DictWriter(out_file,fieldnames=["Prompt","Liked","Disliked"])
+    writer.writeheader()
+    writer.writerows(rows)
+rows1=list()
+with open(filetopentraining,"r") as in_file:
+ for line in in_file:
+  lines=line.split("/")
+  if(len(lines)==3):
+   rows1.append({"Prompt":lines[0],"Liked":lines[1],"Disliked":lines[2]}) 
+  else:
+   continue 
+with open ("DataSetTraining.csv","w",encoding="UTF-8",newline="") as out_file:
+    writer=csv.DictWriter(out_file,fieldnames=["Prompt","Liked","Disliked"])
+    writer.writeheader()
+    writer.writerows(rows1)
