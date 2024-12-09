@@ -33,8 +33,8 @@ for row in reader:
  
 
 pandas_df["text"]=text_row_formatted
-pandas_df=pandas_df.drop("Disliked", axis='columns')
 pandas_df=Dataset.from_pandas(pandas_df)
+print(pandas_df)
 #dataset=pandas_df.map(lambda e: tokenizer(e['text'], truncation=True, padding='max_length'), batched=True)
 
 model = AutoModelForCausalLM.from_pretrained(
