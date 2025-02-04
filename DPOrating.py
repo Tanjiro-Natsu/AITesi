@@ -143,22 +143,78 @@ with open(filetopentest,"r") as in_file:
  for line in in_file:
   lines=line.split("/")
   if(len(lines)==3):
+   PromptEmptyStrings=""
+   for line1 in range(len(lines[0].split("-"))):
+       singlefilm=lines[0].split("-")[line1]
+       if(line1==len(lines[0].split("-"))-1):
+        PromptEmptyStrings=PromptEmptyStrings+singlefilm.split("(")[0]
+       else:  
+        PromptEmptyStrings=PromptEmptyStrings+singlefilm.split("(")[0]+"-"
+
+   LikedEmptyStrings=""
+   for line1 in range(len(lines[1].split("-"))):
+       singlefilm=lines[1].split("-")[line1]
+       if(line1==len(lines[1].split("-"))-1):
+        LikedEmptyStrings=LikedEmptyStrings+singlefilm.split("(")[0]
+       else:  
+        LikedEmptyStrings=LikedEmptyStrings+singlefilm.split("(")[0]+"-"
+
+   DislikedEmptyStrings=""
+   for line1 in range(len(lines[2].split("-"))):
+       singlefilm=lines[2].split("-")[line1]
+       if(line1==len(lines[2].split("-"))-1):
+        DislikedEmptyStrings=DislikedEmptyStrings+singlefilm.split("(")[0]
+       else:  
+        DislikedEmptyStrings=DislikedEmptyStrings+singlefilm.split("(")[0]+"-"
+
+   lines[0]=PromptEmptyStrings
+   lines[1]=LikedEmptyStrings
+   lines[2]=DislikedEmptyStrings
    rows.append({"prompt":lines[0],"chosen":lines[1],"rejected":lines[2]}) 
   else:
    continue
-with open ("DataSetTest.csv","w",encoding="UTF-8",newline="") as out_file:
+filetest=filetopentest.split(".")[0]+".csv"
+with open (filetest,"w",encoding="UTF-8",newline="") as out_file:
     writer=csv.DictWriter(out_file,fieldnames=["prompt","chosen","rejected"])
     writer.writeheader()
     writer.writerows(rows)
 rows1=list()
+filetraining=filetopentraining.split(".")[0]+".csv"
 with open(filetopentraining,"r") as in_file:
  for line in in_file:
   lines=line.split("/")
   if(len(lines)==3):
+   PromptEmptyStrings=""
+   for line1 in range(len(lines[0].split("-"))):
+       singlefilm=lines[0].split("-")[line1]
+       if(line1==len(lines[0].split("-"))-1):
+        PromptEmptyStrings=PromptEmptyStrings+singlefilm.split("(")[0]
+       else:  
+        PromptEmptyStrings=PromptEmptyStrings+singlefilm.split("(")[0]+"-"
+
+   LikedEmptyStrings=""
+   for line1 in range(len(lines[1].split("-"))):
+       singlefilm=lines[1].split("-")[line1]
+       if(line1==len(lines[1].split("-"))-1):
+        LikedEmptyStrings=LikedEmptyStrings+singlefilm.split("(")[0]
+       else:  
+        LikedEmptyStrings=LikedEmptyStrings+singlefilm.split("(")[0]+"-"
+
+   DislikedEmptyStrings=""
+   for line1 in range(len(lines[2].split("-"))):
+       singlefilm=lines[2].split("-")[line1]
+       if(line1==len(lines[2].split("-"))-1):
+        DislikedEmptyStrings=DislikedEmptyStrings+singlefilm.split("(")[0]
+       else:  
+        DislikedEmptyStrings=DislikedEmptyStrings+singlefilm.split("(")[0]+"-"
+
+   lines[0]=PromptEmptyStrings
+   lines[1]=LikedEmptyStrings
+   lines[2]=DislikedEmptyStrings
    rows1.append({"prompt":lines[0],"chosen":lines[1],"rejected":lines[2]}) 
   else:
    continue 
-with open ("DataSetTraining.csv","w",encoding="UTF-8",newline="") as out_file:
+with open (filetraining,"w",encoding="UTF-8",newline="") as out_file:
     writer=csv.DictWriter(out_file,fieldnames=["prompt","chosen","rejected"])
     writer.writeheader()
     writer.writerows(rows1)

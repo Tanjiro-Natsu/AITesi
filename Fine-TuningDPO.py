@@ -45,27 +45,33 @@ model = FastLanguageModel.get_peft_model(
 
 
 
-alpaca_prompt = """Below is an instruction that ask for a list of movies, paired with an input that provides a list of movies that you liked . Complete the response with a list based on the file ratings.dat.
-### Instruction:
-{}
-### Input:
-{}
-### Response:
-{}"""
+instruction = "I need movie recommendations so pretend you are MovieGPT an ai model created by openAI to give people good movie recommendations. I'll give you a list of my favorite movies. Then give me a list of new recommended movies based on my preferences"
+def create_prompt( user_message: str,chosen: str) -> str:
+    prompt = f'''
+     "role": "system", "content": {instruction },
+               "role": "user", "content": {user_message},
+               "role": "assistant", "content": {chosen}
+    '''
+    return prompt
+
 EOS_TOKEN = tokenizer.eos_token 
+
+
 def format_prompt(sample):
-    instruction = "You're a movies recommendder. You will be given a list of liked film . You must generate a list with movies based on the list that i gave you."
-    input       = sample["prompt"]
+    input       =sample["prompt"]
     accepted    = sample["chosen"]
     rejected    = sample["rejected"]
-    sample["prompt"]   = alpaca_prompt.format(instruction, input, "")
+    
     sample["chosen"]   = accepted + EOS_TOKEN
     sample["rejected"] = rejected + EOS_TOKEN
+    sample["prompt"]   = create_prompt(input,accepted)
     return sample
 pass
+
 import pandas as pd
 from datasets import Dataset
-df=pd.read_csv("/content/drive/MyDrive/DataSetTraining.csv")
+
+df=pd.read_csv("/content/drive/MyDrive/Tesi/DataSetTraining.csv")
 df=Dataset.from_pandas(df)
 df = df.map(format_prompt,)
 #Preparazione DataSet
@@ -85,7 +91,7 @@ dpo_trainer = DPOTrainer(
         per_device_train_batch_size = 2,
         gradient_accumulation_steps = 4,
         warmup_ratio = 0.1,
-        num_train_epochs = 1,
+        num_train_epochs = 3,
         learning_rate = 5e-6,
         fp16 = not is_bfloat16_supported(),
         bf16 = is_bfloat16_supported(),
@@ -112,13 +118,39 @@ dpo_trainer.train()
 
 
 
-model.save_pretrained("Llama3.2-thesis")
-tokenizer.save_pretrained("Llama3.2-thesis")
+model.save_pretrained("/content/drive/MyDrive/Tesi/Llama3.2-thesis") 
+tokenizer.save_pretrained("/content/drive/MyDrive/Tesi/Llama3.2-thesis")
 #salvataggio modello localmente
 
 
 
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name = "/content/drive/MyDrive/Tesi/Llama3.2-thesis",
+    max_seq_length = max_seq_length,
+    dtype = dtype,
+    load_in_4bit = load_in_4bit,
+)
+FastLanguageModel.for_inference(model) 
+messages = [
 
+    {
+
+        "role": "system",
+
+        "content": "I need movie recommendations so pretend you are MovieGPT an ai model created by openAI to give people good movie recommendations. I'll give you a list of my favorite movies. Then give me a list of new recommended movies based on my preferences",
+    
+
+    },
+
+    {"role": "user", "content": "Toy Story - Pocahontas - Apollo 13 - Schindler's List - Aladdin"
+ },
+
+]
+inputs = tokenizer.apply_chat_template(messages, add_generation_prompt=True,return_tensors = "pt").to("cuda")
+
+generated_ids = model.generate(inputs, do_sample=True, max_new_tokens=1024)
+
+print(tokenizer.batch_decode(generated_ids[:, inputs.shape[1]:], skip_special_tokens=True)[0])
 
 
 
